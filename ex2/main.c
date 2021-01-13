@@ -37,7 +37,7 @@ int main(int argc, char *charv[])
 	short short_int = random_short_create();
 	printf("short             | %d\n", short_int);
 	unsigned short U_short_int = random_unsigned_short_create();
-	printf("unsiged shrot     | %d\n", U_short_int);
+	printf("unsiged short     | %d\n", U_short_int);
 	//long 
 	long long_int = random_long_create();
 	printf("long              | %ld\n", long_int);
