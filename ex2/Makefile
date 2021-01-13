@@ -1,15 +1,18 @@
 
 CC= gcc
 FLAGS= -Wall
+TARGET= data_types.run
 
-data_types.run: main.o data.o 
-	$(CC) $(FLAGS) -o data_types.run main.o data.o
+all: $(TARGET)
+
+$(TARGET): main.o rdata.o 
+	$(CC) $(FLAGS) -o data_types.run main.o rdata.o
 
 main.o: main.c 
 	$(CC) $(FLAGS) -c main.c 
 
-data.o: data.c data.h
-	$(CC) $(FLAGS) -c data.c
+rdata.o: rdata.c rdata.h
+	$(CC) $(FLAGS) -c rdata.c
 
 clean: 
 	rm *.o
