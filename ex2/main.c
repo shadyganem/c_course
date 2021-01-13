@@ -23,11 +23,13 @@ int main(int argc, char *charv[])
 {
 	srand(time(0));
 	PrintIntro("Data Types in C");
+	printf("data type         | random value\n");
+	printf("---------------------------------------------------\n");
 	// chars 
 	char character = random_char_create();
-	printf("character         | %c\n", character);
+	printf("character         | %d\n", character);
 	unsigned char U_character = random_unsigned_char_create();
-	printf("unsigned charater | %c\n", U_character);
+	printf("unsigned charater | %d\n", U_character);
 	//int
 	int integer = random_int_create();
 	printf("integer           | %d\n", integer);
