@@ -3,28 +3,53 @@
 #include <stdlib.h>
 #include "rdata.h"
 #include <time.h>
-
-static void PrintIntro(const char *str)
+#define PLACE_HOLDER_WIDTH 30
+static void print_intro(const char *str)
 {
-	for (int i=0; i < 80; i++)
-	{
-		printf("-");
-	}
+	printf("--------------------------------------------------------------------------------\n");
 	printf("\n");
 	printf("%44s\n", str);
-	for (int i=0; i < 80; i++)
-	{
-		printf("-");
-	}
-	printf("\n");
+	printf("--------------------------------------------------------------------------------\n");
+}
+
+static void print_table(void)
+{
+	printf("---------------------------------------------------\n");
+	printf("char:\n");
+	printf("MAX value = %d\n", MAX_CHAR);
+	printf("MIN value = %d\n", MIN_CHAR);
+	printf("unsigned char:\n");
+	printf("MAX value = %d\n", MAX_UNSIGNED_CHAR);
+	printf("MIN value = %d\n", MIN_UNSIGNED_CHAR);
+	printf("int:\n");
+	printf("MAX value = %d\n", MAX_INT);
+	printf("MIN value = %d\n", MIN_INT);
+	printf("unsigned int:\n");
+	printf("MAX value = %d\n", (unsigned int)MAX_UNSIGNED_INT);
+	printf("MIN value = %d\n", (unsigned int)MIN_UNSIGNED_INT);
+	printf("long:\n");
+	printf("MAX value = %ld\n", MAX_LONG);
+	printf("MIN value = %ld\n", MIN_LONG);
+	printf("unsigned long:\n");
+	printf("MAX value = %ld\n", (unsigned long)MAX_UNSIGNED_LONG);
+	printf("MIN value = %ld\n", (unsigned long int)MIN_UNSIGNED_LONG);
+	printf("float:\n");
+	printf("MAX value = %s\n", MAX_FLOAT);
+	printf("MIN value = %s\n", MIN_FLOAT);
+	printf("double:\n");
+	printf("MAX value = %s\n", MAX_DOUBLE);
+	printf("MIN value = %s\n", MIN_DOUBLE);
+	printf("long double:\n");
+	printf("MAX value = %s\n", MAX_LONG_DOUBLE);
+	printf("MIN value = %s\n", MIN_LONG_DOUBLE);
+	printf("---------------------------------------------------\n");
 }
 
 int main(int argc, char *charv[])
 {
 	srand(time(0));
-	PrintIntro("Data Types in C");
+	print_intro("Data Types in C");
 	printf("data type         | random value\n");
-	printf("---------------------------------------------------\n");
 	// chars 
 	char character = random_char_create();
 	printf("character         | %d\n", character);
@@ -52,5 +77,6 @@ int main(int argc, char *charv[])
 	printf("double            | %f\n", r_double);
 	long double r_long_double = random_long_double_create();
 	printf("long double       | %Lf\n", r_long_double);	
+	print_table();
 	return 0;
 }
