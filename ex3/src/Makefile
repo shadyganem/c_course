@@ -1,4 +1,4 @@
-DEPENDENCIES = main.o argparser.o
+DEPENDENCIES = main.o argsparser.o
 CC = gcc
 FLAGS = -Wall
 TARGET := converter
