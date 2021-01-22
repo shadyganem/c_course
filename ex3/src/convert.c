@@ -13,17 +13,40 @@
 #define STATUS_OK 0 
 
 static unsigned int m_to_cm(double meters);
+static void input_error_exit();
 
 static const struct 
 {
 	char * in_unit;
 	char * out_unit;
-	unsigned int (*handler)(double input);
-} input_handler[] = {{"-m",
-		      "-cm",
-			m_to_cm}};
+	unsigned int (*callback)(double input);
+} handler[] = {{"-m",
+	        "-cm",
+        	m_to_cm}};
 
-static unsigned int string_to_double(const char * input_arg);
+static double string_to_double(const char * input_arg)
+{
+	bool period_flag = false;
+	//first: check if the number contains only digits
+	for (int i = 0; i < strlen(input_arg); i++)
+	{
+		if (input_arg[i] < '0' || input_arg[i] > '9')
+		{
+			if (input_arg[i] == '.' && period_flag == true)
+			{	
+				printf("input error: input value must be a number");
+				input_error_exit();
+			}
+			else
+			{
+				period_flag = true;
+			}
+		}
+	}
+	char *end_ptr;	
+	return strtod(input_arg, &end_ptr);
+
+}	
 
 static unsigned int m_to_cm(double meters)
 {
@@ -54,15 +77,17 @@ static void input_error_exit()
 int main(int argc, char **argv)
 {
 	int num_of_el = 0;
-	void (*handler)(double input);
+	unsigned int (*callback)(double input);
+	double amount = 0;
 	//skping the fist arg
 	argv++;
 	argc--;
+	amount = string_to_double(argv[1]);
 	if (argc == 0)
 	{
 		input_error_exit();
 	}	
-	num_of_el = sizeof(input_handler)/HANDLER_ELEMENT_SIZE;	
+	num_of_el = sizeof(handler)/HANDLER_ELEMENT_SIZE;	
 	if (strcmp(argv[0], "-v") == 0)
 	{
 		print_version();
@@ -75,12 +100,18 @@ int main(int argc, char **argv)
 	{
 		for (int i = 0; i < num_of_el; i++)
 		{
+			if (strcmp(handler[i].in_unit, argv[0]) == 0)
+			{
+				if (strcmp(handler[i].out_unit, argv[2]) == 0)
+				{
+					callback = handler->callback;
+				}
+			}
 			
 		}
 	}
-
+	callback(amount);
 	
 	return 0;
 }
-
 

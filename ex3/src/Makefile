@@ -1,7 +1,7 @@
-DEPENDENCIES = convert.o argsparser.o
+DEPENDENCIES = convert.o 
 CC = gcc
 FLAGS = -Wall
-TARGET := converter
+TARGET := convert
 
 $(TARGET): $(DEPENDENCIES)
 	$(CC) $(FLAGS) -o $@ $(DEPENDENCIES) 
@@ -9,5 +9,5 @@ $(TARGET): $(DEPENDENCIES)
 main.o: convert.c version.h
 	$(CC) $(FLAGS) -c convert.c
 
-argparser.o: argparser.c argparser.h
-	$(CC) $(FLAGS) -c argparser.c
+clean:
+	rm *.o $(TARGET)
