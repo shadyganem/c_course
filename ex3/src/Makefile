@@ -1,7 +1,7 @@
 DEPENDENCIES = convert.o 
 CC = gcc
 FLAGS = -Wall
-TARGET := convert
+TARGET := convert.out
 
 $(TARGET): $(DEPENDENCIES)
 	$(CC) $(FLAGS) -o $@ $(DEPENDENCIES) 

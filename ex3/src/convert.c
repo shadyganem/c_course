@@ -13,6 +13,7 @@
 #define STATUS_OK 0 
 
 static unsigned int m_to_cm(double meters);
+static unsigned int m_to_nm(double meters);
 static void input_error_exit();
 
 static const struct 
@@ -20,9 +21,10 @@ static const struct
 	char * in_unit;
 	char * out_unit;
 	unsigned int (*callback)(double input);
-} handler[] = {{"-m",
-	        "-cm",
-        	m_to_cm}};
+} handler[] = { {"-m", "-cm", m_to_cm},
+		{"-m", "-nm", m_to_nm} };
+
+static int G_num_of_el = sizeof(handler)/HANDLER_ELEMENT_SIZE;	
 
 static double string_to_double(const char * input_arg)
 {
@@ -45,7 +47,6 @@ static double string_to_double(const char * input_arg)
 	}
 	char *end_ptr;	
 	return strtod(input_arg, &end_ptr);
-
 }	
 
 static unsigned int m_to_cm(double meters)
@@ -54,15 +55,33 @@ static unsigned int m_to_cm(double meters)
 	return STATUS_OK;
 }
 
-static void print_help()
+static unsigned int m_to_nm(double meters)
+{
+	printf("%lf m = %lf nm\n", meters, meters*1000000000);
+	return STATUS_OK;
+}
+
+static void print_units_list_and_exit()
+{
+	printf("The available units for conversion\n");
+	for (int i = 0; i < G_num_of_el; i++)
+	{
+		printf("%s to %s\n", handler[i].in_unit, handler[i].out_unit); 
+	}
+	exit(0);
+}
+	
+static void print_help_and_exit()
 {
 	printf("convert takes 3 arguments\n");
 	printf("1) orgin unit flag \n");
+	exit(0);
 }
 
-static void print_version()
+static void print_version_and_exit()
 {
 	printf("convert v%s\n", G_Version);
+	exit(0);
 }
 
 // will print an error message and exits with code 1 
@@ -76,42 +95,47 @@ static void input_error_exit()
 
 int main(int argc, char **argv)
 {
-	int num_of_el = 0;
 	unsigned int (*callback)(double input);
 	double amount = 0;
 	//skping the fist arg
 	argv++;
 	argc--;
-	amount = string_to_double(argv[1]);
 	if (argc == 0)
 	{
 		input_error_exit();
 	}	
-	num_of_el = sizeof(handler)/HANDLER_ELEMENT_SIZE;	
+	if (strcmp(argv[0], "-l") == 0)
+	{
+		print_units_list_and_exit();
+	}
 	if (strcmp(argv[0], "-v") == 0)
 	{
-		print_version();
+		print_version_and_exit();
 	} 
 	else if (strcmp(argv[0], "-h") == 0)
 	{
-		print_help();
+		print_help_and_exit();
 	}
 	else
 	{
-		for (int i = 0; i < num_of_el; i++)
+		amount = string_to_double(argv[1]);
+		int i = 0;
+		while (true)
 		{
+			if (i == G_num_of_el)
+				input_error_exit();
 			if (strcmp(handler[i].in_unit, argv[0]) == 0)
 			{
-				if (strcmp(handler[i].out_unit, argv[2]) == 0)
+				if (strcmp(handler[i].out_unit, argv[2]) == 0)	
 				{
-					callback = handler->callback;
+					callback = handler[i].callback;
+					break;
 				}
 			}
-			
+			i++;
 		}
+		callback(amount);
 	}
-	callback(amount);
-	
 	return 0;
 }
 
