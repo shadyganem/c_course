@@ -14,6 +14,8 @@
 
 static unsigned int m_to_cm(double meters);
 static unsigned int m_to_nm(double meters);
+static unsigned int C_to_F(double degrees);
+static unsigned int F_to_C(double degrees);
 static void input_error_exit();
 
 static const struct 
@@ -22,7 +24,9 @@ static const struct
 	char * out_unit;
 	unsigned int (*callback)(double input);
 } handler[] = { {"-m", "-cm", m_to_cm},
-		{"-m", "-nm", m_to_nm} };
+		{"-m", "-nm", m_to_nm}, 
+		{"-C", "-F" , C_to_F },
+		{"-F", "-C" , F_to_C }};
 
 static int G_num_of_el = sizeof(handler)/HANDLER_ELEMENT_SIZE;	
 
@@ -48,6 +52,19 @@ static double string_to_double(const char * input_arg)
 	char *end_ptr;	
 	return strtod(input_arg, &end_ptr);
 }	
+
+static unsigned int F_to_C(double degrees)
+{
+	double TC = (degrees - 32)/1.8;
+	printf("%f F = %f C\n", degrees, TC);
+	return STATUS_OK;
+}
+static unsigned int C_to_F(double degrees)
+{
+	double TF = (degrees*1.8)+32;
+	printf("%f C = %f F\n", degrees, TF);
+	return STATUS_OK;
+}
 
 static unsigned int m_to_cm(double meters)
 {
