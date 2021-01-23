@@ -1,7 +1,5 @@
-/**
- * @author Shady Ganem <shadyganem@gmail.com>
- *
- * this portgram converts units. 
+/** * @author Shady Ganem <shadyganem@gmail.com> *
+ * This portgram converts units. 
  **/
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,15 +16,24 @@ static unsigned int C_to_F(double degrees);
 static unsigned int F_to_C(double degrees);
 static void input_error_exit();
 
-static const struct 
+typedef const enum 
+{
+	ERR_BAD_INPUT, // BAD INPUT 
+	ERR_UNIT_NOT_FOUND // UNIT NOT FOUND	
+	
+} ERROR;
+
+struct unit 
 {
 	char * in_unit;
 	char * out_unit;
 	unsigned int (*callback)(double input);
-} handler[] = { {"-m", "-cm", m_to_cm},
-		{"-m", "-nm", m_to_nm}, 
-		{"-C", "-F" , C_to_F },
-		{"-F", "-C" , F_to_C }};
+};
+
+static const struct unit handler[] = { {"-m", "-cm", m_to_cm},
+		                       {"-m", "-nm", m_to_nm}, 
+		                       {"-C", "-F" , C_to_F },
+		                       {"-F", "-C" , F_to_C }};
 
 static int G_num_of_el = sizeof(handler)/HANDLER_ELEMENT_SIZE;	
 
@@ -101,13 +108,20 @@ static void print_version_and_exit()
 	exit(0);
 }
 
-// will print an error message and exits with code 1 
+/* will print an error message and exits with code 1 */
 static void input_error_exit()
 {
 	fprintf(stderr,
 		"convert: bad command line argument(s)\n"
 		"For more information run convert -h\n");
 	exit(1);
+}
+
+/* This function will print the proper error message and exit */
+void handle_error_and_exit(ERROR err)
+{
+	printf("error %d\n", err);
+	exit(0);
 }
 
 int main(int argc, char **argv)
